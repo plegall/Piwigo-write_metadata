@@ -1,0 +1,1 @@
+Write Piwigo photo properties (title, description, author, tags) into IPTC fields
