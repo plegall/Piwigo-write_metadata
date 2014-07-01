@@ -1,0 +1,1 @@
+Salveaza proprietatile fotografiei (titlu, descriere, autor, cuvinte cheie) in campurile IPTC.
