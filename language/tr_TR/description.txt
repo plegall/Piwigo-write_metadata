@@ -1,0 +1,1 @@
+IPTC alanlarına Piwigo fotoğraf öznitelikleri (başlık, açıklama, yazar, etiketler) yazar
