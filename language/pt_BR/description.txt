@@ -1,0 +1,1 @@
+Escrever as propiedades Piwigo das fotos (Título, Descrição, Autor e Tags) nos campos IPTC
