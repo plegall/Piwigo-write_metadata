@@ -1,0 +1,1 @@
+Ierakstīt IPTC laukos Piwigo foto raksturojošās īpašības (nosaukumu, aprakstu , autoru, tegus) 
