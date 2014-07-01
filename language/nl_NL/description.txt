@@ -1,0 +1,1 @@
+Schrijf Piwigo foto-eigenschappen (titel, beschrijving, auteur, labels) naar IPTC-velden
