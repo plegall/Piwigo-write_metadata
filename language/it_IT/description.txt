@@ -1,0 +1,1 @@
+Scrivere proprietà delle foto (titolo, descrizione, autore, tag) nei metadati IPTC in Piwigo
