@@ -1,0 +1,1 @@
+Skribas la ecojn de Piwigo-foto (titolo, priskribo, aŭtoro, etikedoj) en la IPTC-kampojn
