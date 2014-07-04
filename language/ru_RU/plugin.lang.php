@@ -20,6 +20,6 @@
 // | Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, |
 // | USA.                                                                  |
 // +-----------------------------------------------------------------------+
-$lang['Metadata written into file'] = 'Метаданные записываются в файл(ы)';
-$lang['Write metadata'] = 'Запись метаданных';
+$lang['Metadata written into file'] = 'Метаданные записаны в файл';
+$lang['Write metadata'] = 'Запись метаданных в поля IPTC';
 $lang['Write metadata in progress...'] = 'Идет запись метаданных...';
