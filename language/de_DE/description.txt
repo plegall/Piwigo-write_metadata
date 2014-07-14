@@ -1,0 +1,1 @@
+Schreibe Piwigo Foto Metadaten (Titel, Beschreibung, Autor, Schlüsselwörter) in IPTC Felder.
