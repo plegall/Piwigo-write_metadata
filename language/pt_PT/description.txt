@@ -1,0 +1,1 @@
+Escrever propriedades da foto PIWIGO (Título, descrição,autor, etiquetas)
