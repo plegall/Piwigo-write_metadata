@@ -1,0 +1,1 @@
+Skriver Piwigo bildeegenskaper (tittel, beskrivelse, forfatter, taggs) inn i IPTC felt
