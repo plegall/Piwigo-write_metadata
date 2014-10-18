@@ -1,0 +1,1 @@
+Zapiši lastnosti Piwigo fotografij (ime, opis, avtor, oznake) v IPTC polja 
