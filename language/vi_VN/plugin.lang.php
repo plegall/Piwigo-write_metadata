@@ -20,6 +20,6 @@
 // | Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, |
 // | USA.                                                                  |
 // +-----------------------------------------------------------------------+
-$lang['Metadata written into file'] = 'Siêu dữ liệu đã được ghi vào file';
+$lang['Metadata written into file'] = 'Siêu dữ liệu đã được ghi vào tập tin';
 $lang['Write metadata'] = 'Ghi siêu dữ liệu';
 $lang['Write metadata in progress...'] = 'Đang ghi siêu dữ liệu';
