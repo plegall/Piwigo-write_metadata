@@ -1,0 +1,1 @@
+Salvesta Piwigo suvandid (pealkiri, kirjeldus, autor, sildid) IPTC väljadele.
