@@ -1,0 +1,1 @@
+Zapisz właściwości zdjęć z Piwigo (tytuł, opis, autor, tagi) do odpowiednich pól IPTC
