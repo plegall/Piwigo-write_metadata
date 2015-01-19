@@ -1,0 +1,1 @@
+Sparar egenskaper från Piwigo (titel, beskrivning, fotograf, taggar) till IPTC-fält
