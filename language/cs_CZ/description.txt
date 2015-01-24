@@ -1,0 +1,1 @@
+Modul umožní zápis vlastností jako název, popis, autor, štítky) do IPTC pole
