@@ -1,0 +1,1 @@
+Écrire les propriétés Piwigo des photos (titre, description, auteur, mots-clé) dans les métadonnées IPTC
