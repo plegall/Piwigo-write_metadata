@@ -1,0 +1,1 @@
+Escriu les propietats de les fotos Piwigo (títol, descripció, autor, etiquetes) en camps IPTC
