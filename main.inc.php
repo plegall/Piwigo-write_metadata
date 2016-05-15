@@ -54,10 +54,17 @@ function wm_picture_write_metadata()
   if (isset($page['page']) and 'photo' == $page['page'] and isset($_GET['write_metadata']))
   {
     check_input_parameter('image_id', $_GET, false, PATTERN_ID);
-    wm_write_metadata($_GET['image_id']);
+    list($rc, $output) = wm_write_metadata($_GET['image_id']);
 
-    $_SESSION['page_infos'][] = l10n('Metadata written into file');
-    redirect(get_root_url().'admin.php?page=photo-'.$_GET['image_id'].'-properties');
+    if (count($output) == 0)
+    {
+      $_SESSION['page_infos'][] = l10n('Metadata written into file');
+      redirect(get_root_url().'admin.php?page=photo-'.$_GET['image_id'].'-properties');
+    }
+    else
+    {
+      $page['errors'] = array_merge($page['errors'], $output);
+    }
   }
 }
 
@@ -136,6 +143,7 @@ SELECT
   $tags = wm_prepare_string($row['tags'], 64);
 
   $command = isset($conf['exiftool_path']) ? $conf['exiftool_path'] : 'exiftool';
+  $command.= ' -q';
 
   if (strlen($name) > 0)
   {
@@ -177,13 +185,14 @@ SELECT
   }
 
   $command.= ' "'.$row['path'].'"';
+  $command.= ' 2>&1';
   // echo $command;
 
-  $exec_return = exec($command, $output);
+  $exec_return = exec($command, $output, $rc);
   // echo '$exec_return = '.$exec_return.'<br>';
   // echo '<pre>'; print_r($output); echo '</pre>';
 
-  return true;
+  return array($rc, $output);
 }
 
 function wm_prepare_string($string, $maxLen)
