@@ -133,7 +133,7 @@ SELECT
   $name = wm_prepare_string($row['name'], 256);
   $description = wm_prepare_string($row['comment'], 2000);
   $author = wm_prepare_string($row['author'], 32);
-  $tags = wm_prepare_string($row['tags'], 64);
+  $tags = explode(",", $row['tags']);
 
   $command = isset($conf['exiftool_path']) ? $conf['exiftool_path'] : 'exiftool';
 
@@ -169,12 +169,12 @@ SELECT
 
     $command.= ' -IPTC:'.$iptc_field.'="'.$author.'"';
   }
-  
-  if (strlen($tags) > 0)
-  {
-    # 2#025 in iptcparse($imginfo['APP13'])
-    $command.= ' -IPTC:Keywords="'.$tags.'"';
+
+  # 2#025 in iptcparse($imginfo['APP13'])
+  foreach ($tags as $singletag) {
+    $command.= ' -IPTC:Keywords="'.wm_cutString($singletag, 64).'"';
   }
+
 
   $command.= ' "'.$row['path'].'"';
   // echo $command;
