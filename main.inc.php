@@ -4,7 +4,7 @@ Plugin Name: Write Metadata
 Description: Write Piwigo photo properties (title, description, author, tags) into IPTC fields
 Author: plg
 Plugin URI: http://piwigo.org/ext/extension_view.php?eid=769
-Version: 2.8.a
+Version: auto
 */
 
 // +-----------------------------------------------------------------------+
