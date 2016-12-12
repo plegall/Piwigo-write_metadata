@@ -136,6 +136,8 @@ SELECT
   $tags = explode(",", $row['tags']);
 
   $command = isset($conf['exiftool_path']) ? $conf['exiftool_path'] : 'exiftool';
+  $command.= ' -charset iptc=UTF8';
+  // UTF8 should be the default, but obviously it isn't (libimage-exiftool-perl Version: 9.46-1; Ubuntu 14.04.5)
 
   if (strlen($name) > 0)
   {
@@ -174,7 +176,6 @@ SELECT
   foreach ($tags as $singletag) {
     $command.= ' -IPTC:Keywords="'.wm_cutString($singletag, 64).'"';
   }
-
 
   $command.= ' "'.$row['path'].'"';
   // echo $command;
