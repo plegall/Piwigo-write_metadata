@@ -3,8 +3,8 @@
 Plugin Name: Write Metadata
 Description: Write Piwigo photo properties (title, description, author, tags) into IPTC fields
 Author: plg
-Plugin URI: http://piwigo.org/ext/extension_view.php?eid=
-Version: auto
+Plugin URI: http://piwigo.org/ext/extension_view.php?eid=769
+Version: 2.8.a
 */
 
 // +-----------------------------------------------------------------------+
@@ -54,17 +54,10 @@ function wm_picture_write_metadata()
   if (isset($page['page']) and 'photo' == $page['page'] and isset($_GET['write_metadata']))
   {
     check_input_parameter('image_id', $_GET, false, PATTERN_ID);
-    list($rc, $output) = wm_write_metadata($_GET['image_id']);
+    wm_write_metadata($_GET['image_id']);
 
-    if (count($output) == 0)
-    {
-      $_SESSION['page_infos'][] = l10n('Metadata written into file');
-      redirect(get_root_url().'admin.php?page=photo-'.$_GET['image_id'].'-properties');
-    }
-    else
-    {
-      $page['errors'] = array_merge($page['errors'], $output);
-    }
+    $_SESSION['page_infos'][] = l10n('Metadata written into file');
+    redirect(get_root_url().'admin.php?page=photo-'.$_GET['image_id'].'-properties');
   }
 }
 
@@ -143,7 +136,6 @@ SELECT
   $tags = wm_prepare_string($row['tags'], 64);
 
   $command = isset($conf['exiftool_path']) ? $conf['exiftool_path'] : 'exiftool';
-  $command.= ' -q';
 
   if (strlen($name) > 0)
   {
@@ -185,14 +177,13 @@ SELECT
   }
 
   $command.= ' "'.$row['path'].'"';
-  $command.= ' 2>&1';
   // echo $command;
 
-  $exec_return = exec($command, $output, $rc);
+  $exec_return = exec($command, $output);
   // echo '$exec_return = '.$exec_return.'<br>';
   // echo '<pre>'; print_r($output); echo '</pre>';
 
-  return array($rc, $output);
+  return true;
 }
 
 function wm_prepare_string($string, $maxLen)
