@@ -118,7 +118,7 @@ function wm_add_methods($arr)
  */
 function wm_write_metadata($image_id)
 {
-  global $conf;
+  global $conf, $logger;
   
   $query = '
 SELECT
@@ -140,7 +140,6 @@ SELECT
   $name = wm_prepare_string($row['name'], 256);
   $description = wm_prepare_string($row['comment'], 2000);
   $author = wm_prepare_string($row['author'], 32);
-  $tags = wm_prepare_string($row['tags'], 64);
 
   $command = isset($conf['exiftool_path']) ? $conf['exiftool_path'] : 'exiftool';
   $command.= ' -q';
@@ -178,15 +177,22 @@ SELECT
     $command.= ' -IPTC:'.$iptc_field.'="'.$author.'"';
   }
   
-  if (strlen($tags) > 0)
+  if (strlen($row['tags']) > 0)
   {
-    # 2#025 in iptcparse($imginfo['APP13'])
-    $command.= ' -IPTC:Keywords="'.$tags.'"';
+    $tags = explode(',', $row['tags']);
+    foreach ($tags as $tag)
+    {
+      $tag = wm_prepare_string($tag, 64);
+
+      # 2#025 in iptcparse($imginfo['APP13'])
+      $command.= ' -IPTC:Keywords="'.$tag.'"';
+    }
   }
 
   $command.= ' "'.$row['path'].'"';
   $command.= ' 2>&1';
   // echo $command;
+  $logger->info(__FUNCTION__.' command = '.$command);
 
   $exec_return = exec($command, $output, $rc);
   // echo '$exec_return = '.$exec_return.'<br>';
