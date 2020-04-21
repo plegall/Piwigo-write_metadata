@@ -127,12 +127,13 @@ SELECT
     img.author,
     img.date_creation,
     GROUP_CONCAT(tags.name) AS tags,
-    img.path
+    img.path,
+    img.representative_ext
   FROM '.IMAGES_TABLE.' AS img
     LEFT OUTER JOIN '.IMAGE_TAG_TABLE.' AS img_tag ON img_tag.image_id = img.id
     LEFT OUTER JOIN '.TAGS_TABLE.' AS tags ON tags.id = img_tag.tag_id
   WHERE img.id = '.$image_id.'
-  GROUP BY img.id, img.name, img.comment, img.author, img.path
+  GROUP BY img.id, img.name, img.comment, img.author, img.path, img.representative_ext
 ;';
   $result = pwg_query($query);
   $row = pwg_db_fetch_assoc($result);
@@ -197,6 +198,9 @@ SELECT
   $exec_return = exec($command, $output, $rc);
   // echo '$exec_return = '.$exec_return.'<br>';
   // echo '<pre>'; print_r($output); echo '</pre>';
+
+  // as derivatives may contain metadata, they must be reset
+  delete_element_derivatives($row);
 
   return array($rc, $output);
 }
