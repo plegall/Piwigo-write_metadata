@@ -39,7 +39,7 @@ function wm_add_link_prefilter($content, &$smarty)
   $search = '{if !url_is_remote($PATH)}';
   
   $replacement = '{if !url_is_remote($PATH)}
-<li><a class="icon-arrows-cw" href="{$U_WRITEMETADATA}">{\'Write metadata\'|@translate}</a></li>';
+  <a class="icon-docs" href="{$U_WRITEMETADATA}" title="{\'Write metadata\'|translate}"></a>';
 
   return str_replace($search, $replacement, $content);
 }
