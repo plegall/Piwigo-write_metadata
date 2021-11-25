@@ -21,9 +21,9 @@ define('WRITE_METADATA_PATH' , PHPWG_PLUGINS_PATH.basename(dirname(__FILE__)).'/
 add_event_handler('loc_begin_admin_page', 'wm_add_link', 60);
 function wm_add_link()
 {
-	global $template, $page;
+  global $template, $page;
 
-	$template->set_prefilter('picture_modify', 'wm_add_link_prefilter');
+  $template->set_prefilter('picture_modify', 'wm_add_link_prefilter');
 
   if (isset($page['page']) and 'photo' == $page['page'])
   {
@@ -34,7 +34,7 @@ function wm_add_link()
   }
 }
 
-function wm_add_link_prefilter($content, &$smarty)
+function wm_add_link_prefilter($content)
 {
   $search = '{if !url_is_remote($PATH)}';
   
