@@ -21,9 +21,9 @@ define('WRITE_METADATA_PATH' , PHPWG_PLUGINS_PATH.basename(dirname(__FILE__)).'/
 add_event_handler('loc_begin_admin_page', 'wm_add_link', 60);
 function wm_add_link()
 {
-	global $template, $page;
+  global $template, $page;
 
-	$template->set_prefilter('picture_modify', 'wm_add_link_prefilter');
+  $template->set_prefilter('picture_modify', 'wm_add_link_prefilter');
 
   if (isset($page['page']) and 'photo' == $page['page'])
   {
@@ -34,12 +34,12 @@ function wm_add_link()
   }
 }
 
-function wm_add_link_prefilter($content, &$smarty)
+function wm_add_link_prefilter($content)
 {
   $search = '{if !url_is_remote($PATH)}';
   
   $replacement = '{if !url_is_remote($PATH)}
-<li><a class="icon-arrows-cw" href="{$U_WRITEMETADATA}">{\'Write metadata\'|@translate}</a></li>';
+  <a class="icon-docs" href="{$U_WRITEMETADATA}" title="{\'Write metadata\'|translate}"></a>';
 
   return str_replace($search, $replacement, $content);
 }
@@ -127,12 +127,13 @@ SELECT
     img.author,
     img.date_creation,
     GROUP_CONCAT(tags.name) AS tags,
-    img.path
+    img.path,
+    img.representative_ext
   FROM '.IMAGES_TABLE.' AS img
     LEFT OUTER JOIN '.IMAGE_TAG_TABLE.' AS img_tag ON img_tag.image_id = img.id
     LEFT OUTER JOIN '.TAGS_TABLE.' AS tags ON tags.id = img_tag.tag_id
   WHERE img.id = '.$image_id.'
-  GROUP BY img.id, img.name, img.comment, img.author, img.path
+  GROUP BY img.id, img.name, img.comment, img.author, img.path, img.representative_ext
 ;';
   $result = pwg_query($query);
   $row = pwg_db_fetch_assoc($result);
@@ -197,6 +198,9 @@ SELECT
   $exec_return = exec($command, $output, $rc);
   // echo '$exec_return = '.$exec_return.'<br>';
   // echo '<pre>'; print_r($output); echo '</pre>';
+
+  // as derivatives may contain metadata, they must be reset
+  delete_element_derivatives($row);
 
   return array($rc, $output);
 }
