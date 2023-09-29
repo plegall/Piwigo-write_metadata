@@ -1,10 +1,10 @@
 <?php
 /*
 Plugin Name: Write Metadata
-Description: Write Piwigo photo properties (title, description, author, tags) into IPTC fields
-Author: plg
-Plugin URI: http://piwigo.org/ext/extension_view.php?eid=
-Version: auto
+Description: Write Piwigo photo properties (title, description, author, tags) into IPTC fields and date into EXIF field
+Author: plg (customized by windracer)
+Plugin URI: http://piwigo.org/ext/extension_view.php?eid=769
+Version: 12.b
 */
 
 // +-----------------------------------------------------------------------+
@@ -141,6 +141,7 @@ SELECT
   $name = wm_prepare_string($row['name'], 256);
   $description = wm_prepare_string($row['comment'], 2000);
   $author = wm_prepare_string($row['author'], 32);
+  $date_creation = wm_prepare_string($row['date_creation'], 20);
 
   $command = isset($conf['exiftool_path']) ? $conf['exiftool_path'] : 'exiftool';
   $command.= ' -q';
@@ -176,6 +177,13 @@ SELECT
     }
 
     $command.= ' -IPTC:'.$iptc_field.'="'.$author.'"';
+  }
+
+  if (strlen($date_creation) > 0)
+  {
+    # 2#055 in iptcparse($imginfo['APP13'])
+    # set date/time in EXIF instead of IPTC
+    $command.= ' -DateTimeOriginal="'.$date_creation.'"';
   }
   
   if (strlen($row['tags']) > 0)
