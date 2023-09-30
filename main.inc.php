@@ -151,6 +151,11 @@ SELECT
     $command.= ' -overwrite_original';
   }
 
+  if ($conf['write_metadata_preserve_date'])
+  {
+    $command.= ' -preserve';
+  }
+
   if (strlen($name) > 0)
   {
     # 2#105 in iptcparse($imginfo['APP13'])
