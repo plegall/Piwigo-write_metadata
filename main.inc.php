@@ -192,8 +192,11 @@ SELECT
   if (strlen($date_creation) > 0)
   {
     # 2#055 in iptcparse($imginfo['APP13'])
-    # set date/time in EXIF instead of IPTC
-    $command.= ' -DateTimeOriginal="'.$date_creation.'"';
+    $command.= ' -IPTC:DateCreated="'.$date_creation.'"';
+    if ($conf['write_metadata_set_exif_date'])
+    {
+      $command.= ' -DateTimeOriginal="'.$date_creation.'"';
+    }
   }
   
   if (strlen($row['tags']) > 0)
