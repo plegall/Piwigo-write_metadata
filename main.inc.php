@@ -4,7 +4,7 @@ Plugin Name: Write Metadata
 Description: Write Piwigo photo properties (title, description, author, tags) into IPTC fields and date into EXIF field
 Author: plg (customized by windracer)
 Plugin URI: http://piwigo.org/ext/extension_view.php?eid=769
-Version: 12.b
+Version: 12.1
 */
 
 // +-----------------------------------------------------------------------+
@@ -145,6 +145,11 @@ SELECT
 
   $command = isset($conf['exiftool_path']) ? $conf['exiftool_path'] : 'exiftool';
   $command.= ' -q';
+
+  if ($conf['write_metadata_overwrite_original'])
+  {
+    $command.= ' -overwrite_original';
+  }
 
   if (strlen($name) > 0)
   {
