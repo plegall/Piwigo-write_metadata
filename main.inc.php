@@ -128,7 +128,9 @@ SELECT
     img.date_creation,
     GROUP_CONCAT(tags.name) AS tags,
     img.path,
-    img.representative_ext
+    img.representative_ext,
+    img.latitude,
+    img.longitude
   FROM '.IMAGES_TABLE.' AS img
     LEFT OUTER JOIN '.IMAGE_TAG_TABLE.' AS img_tag ON img_tag.image_id = img.id
     LEFT OUTER JOIN '.TAGS_TABLE.' AS tags ON tags.id = img_tag.tag_id
@@ -140,10 +142,39 @@ SELECT
 
   $name = wm_prepare_string($row['name'], 256);
   $description = wm_prepare_string($row['comment'], 2000);
+  $description = str_replace('"', '\"', $description);
+
+  $cr_date = wm_prepare_string($row['date_creation'], 20);
+  if ( strlen($cr_date) > 0)
+  {
+    # Replace delimiter '-' which is stored in the DB with
+    # the delimiter used for exiftool ':'
+    $cr_date = str_replace('-', ':', $cr_date);
+  }
+
   $author = wm_prepare_string($row['author'], 32);
+  $gpslatitude = wm_prepare_string($row['latitude'], 12);
+  $gpslatituderef = 'N';
+  $gpslongitude = wm_prepare_string($row['longitude'], 12);
+  $gpslongituderef = 'E';
+
+  if ( $gpslongitude < 0.0 )
+  {
+    $gpslongituderef = 'W';
+    $gpslongitude = abs($gpslongitude);
+  }
+
+  if ( $gpslatitude < 0.0 )
+  {
+    $gpslatituderef = 'S';
+    $gpslatitude = abs($gpslatitude);
+  }
+
 
   $command = isset($conf['exiftool_path']) ? $conf['exiftool_path'] : 'exiftool';
   $command.= ' -q';
+  $command.= ' -P';
+  $command.= ' -overwrite_original';
 
   if (strlen($name) > 0)
   {
@@ -188,6 +219,30 @@ SELECT
       # 2#025 in iptcparse($imginfo['APP13'])
       $command.= ' -IPTC:Keywords="'.$tag.'"';
     }
+  }
+
+  if (strlen($cr_date) > 0)
+  {
+    # EXIF:CreateDate YYYY:MM:DD HH:MM:SS
+    $command.= ' -EXIF:CreateDate="'.$cr_date.'"';
+    # IPTC:DateCreated YYYY:MM:DD HH:MM:SS results in YYYYMMDD
+    $command.= ' -IPTC:DateCreated="'.$cr_date.'"';
+    # IPTC:TimeCreated YYYY:MM:DD HH:MM:SS results in HHMMSS+<GMT Offset (0200)
+    $command.= ' -IPTC:TimeCreated="'.$cr_date.'"';
+  }
+
+  if (strlen($gpslatitude) > 0)
+  {
+    # EXIF:GPSLatitude
+    $command.= ' -EXIF:GPSLatitude="'.$gpslatitude.'"';
+    $command.= ' -EXIF:GPSLatitudeRef="'.$gpslatituderef.'"';
+  }
+
+  if (strlen($gpslongitude) > 0)
+  {
+    # EXIF:GPSLongitude
+    $command.= ' -EXIF:GPSLongitude="'.$gpslongitude.'"';
+    $command.= ' -EXIF:GPSLongitudeRef="'.$gpslongituderef.'"';
   }
 
   $command.= ' "'.$row['path'].'"';
