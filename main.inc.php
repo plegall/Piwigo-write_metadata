@@ -141,9 +141,20 @@ SELECT
   $name = wm_prepare_string($row['name'], 256);
   $description = wm_prepare_string($row['comment'], 2000);
   $author = wm_prepare_string($row['author'], 32);
+  $date_creation = wm_prepare_string($row['date_creation'], 20);
 
   $command = isset($conf['exiftool_path']) ? $conf['exiftool_path'] : 'exiftool';
   $command.= ' -q';
+
+  if ($conf['write_metadata_overwrite_original'])
+  {
+    $command.= ' -overwrite_original';
+  }
+
+  if ($conf['write_metadata_preserve_date'])
+  {
+    $command.= ' -preserve';
+  }
 
   if (strlen($name) > 0)
   {
@@ -176,6 +187,16 @@ SELECT
     }
 
     $command.= ' -IPTC:'.$iptc_field.'="'.$author.'"';
+  }
+
+  if (strlen($date_creation) > 0)
+  {
+    # 2#055 in iptcparse($imginfo['APP13'])
+    $command.= ' -IPTC:DateCreated="'.$date_creation.'"';
+    if ($conf['write_metadata_set_exif_date'])
+    {
+      $command.= ' -DateTimeOriginal="'.$date_creation.'"';
+    }
   }
   
   if (strlen($row['tags']) > 0)
